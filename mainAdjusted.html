@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+    <style>
+        body {
+            background: #222D32;
+            font-family: 'Roboto', sans-serif;
+        }
+        .login-box {
+            height: auto;
+            background: #1A2226;
+            text-align: center;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+        }
+    </style>
+
+
+
+</head>
+<body>
+
+
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid login-box">
+          <div class="navbar-header">
+            <a class="navbar-brand" style="color: #0DB8DE;" href="#">TO DO LIST</a>
+          </div>
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="#">List</a></li>
+            <li><a href="#" onclick="logout()">Logout</a></li>
+          </ul>
+        </div>
+      </nav>
+        
+      <div class="container" style="color: white;">
+        <h2>Activities</h2>
+        <p id="apiList"></p>
+      </div>
+
+
+      <script>
+        function logout(){
+            window.open('index.html','_parent')
+        }
+
+
+        const xhr = new XMLHttpRequest();
+        let todoDetails;
+        let filteredList;
+
+        xhr.onreadystatechange = function(){
+            if(xhr.readyState === 4 && xhr.status === 200){
+                todoDetails = JSON.parse(xhr.responseText)
+                filteredList = todoDetails.filter(details => details.completed == true)
+                let displayDetails = "";
+
+                for(let i = 0;i < filteredList.length; i++){
+                        displayDetails += "<input type='checkbox' onclick='changeStatus(this)'>"+filteredList[i].title+"<br>"
+                }
+
+
+
+
+                document.getElementById("apiList").innerHTML = displayDetails;
+
+
+            }
+        }
+
+        function fetchTodo(){
+            xhr.open("GET","https://jsonplaceholder.typicode.com/todos");
+            xhr.send();
+        }
+
+        let checkCount = 0;
+        let succMsg = "Congrats. 5 Tasks have been Successfully Completed";
+        function changeStatus(checkbox){
+            return new Promise((resolve, reject) => {
+              if(checkbox.checked){
+                checkCount++;
+                if(checkCount == 5){
+                    alert(succMsg);
+                    resolve();
+
+                }
+              }
+
+            })
+        }
+
+
+        function runOnStart(){
+          fetchTodo();
+          changeStatus().then()
+
+        }
+
+        runOnStart();
+
+      </script>
+    
+</body>
+</html>
