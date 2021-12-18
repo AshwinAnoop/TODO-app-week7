@@ -86,6 +86,7 @@
         let succMsg = "Congrats. 5 Tasks have been Successfully Completed";
         function changeStatus(checkbox){
             return new Promise((resolve, reject) => {
+              let sampleBox = checkbox;
               if(checkbox.checked){
                 checkCount++;
                 if(checkCount >= 5){
@@ -98,15 +99,14 @@
         }
 
 
-        function runOnStart(){
+
           fetchTodo();
-          changeStatus().then((result)=>{
+          changeStatus(sampleBox).then((result)=>{
             alert(result);
           })
 
-        }
 
-        runOnStart();
+
 
       </script>
     
